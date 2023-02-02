@@ -123,7 +123,7 @@ exports.viewSuggetionsPost = async (req, res, next) => {
         `Bucket ${j.name}: Place ${resultArray.map((i) =>
            i.count != 0
             ? `${i.count} ${i.name} Ball${i.count == 1 ? "" : "s"} `
-            : `  0 ${i.name} `
+            : ""
         )} ${
           volumeOfBucket === 0
             ? ""
