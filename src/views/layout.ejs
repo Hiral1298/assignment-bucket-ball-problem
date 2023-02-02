@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<style>
+    body {
+        overflow: hidden;
+        padding: 20px;
+    }
+    
+    #responsive-table {
+        border-collapse: collapse;
+        width: 100%;
+        text-align: center;
+        font-family: Arial, sans-serif;
+    }
+    
+    #responsive-table th {
+        background-color: black;
+        color: #fff;
+        padding: 10px;
+        font-weight: bold;
+        font-size: 34px;
+    }
+    
+    #responsive-table td {
+        border: 1px solid #333;
+        padding: 12px;
+    }
+    
+    #responsive-table tr {
+        background-color: #ddd;
+    }
+    
+    table {
+        table-layout: fixed;
+        width: 100%;
+    }
+    
+    td,
+    th {
+        width: 33.33%;
+        /* Adjust this value to change the width of each column */
+        word-wrap: break-word;
+    }
+    
+    .inputText {
+        width: 40px;
+        margin-left: 20px;
+    }
+    
+    #submit-button {
+        background-color: #333;
+        color: #fff;
+        padding: 12px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        margin-top: 20px;
+    }
+    
+    #submit-button:hover {
+        background-color: #444;
+    }
+</style>
+
+<body>
+    <div style="display:flex;justify-content:center;height: 100vh;flex-direction: column;align-items: center;">
+        <form id="my-form">
+            <table id="responsive-table">
+                <thead>
+                    <tr>
+                        <th colspan="3">INPUTS</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+                    <tr>
+                        <td>
+                            1. Add the volume of the buckets
+                        </td>
+                        <td>2. Add the volume of the balls
+                        </td>
+                        <td>3. Input the number of each colored ball to be placed inside the buckets:
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>A : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" name="emptyVolume" value="<%=data?.emptyVolume[0]%>"> cubic inches
+                        </td>
+                        <td>A: Pink : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" name="volume" value="<%=data?.volume[0]%>"> cubic inches
+                        </td>
+                        <td>A: Pink : <input type="number" min="0" class="inputText" name="count" value="<%=data?.count[0]%>"> Ball
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>B : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" name="emptyVolume" value="<%=data?.emptyVolume[1]%>"> cubic inches
+                        </td>
+                        <td>B: Red : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" name="volume" value="<%=data?.volume[1]%>"> cubic inches
+                        </td>
+                        <td>B: Red : <input type="number" min="0" class="inputText" name="count" value="<%=data?.count[1]%>"> Ball
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>C : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" name="emptyVolume" value="<%=data?.emptyVolume[2]%>"> cubic inches
+                        </td>
+                        <td>C: Blue : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" name="volume" value="<%=data?.volume[2]%>"> cubic inches
+                        </td>
+                        <td>C: Blue : <input type="number" min="0" class="inputText" name="count" value="<%=data?.count[2]%>"> Ball
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>D : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" name="emptyVolume" value="<%=data?.emptyVolume[3]%>"> cubic inches
+                        </td>
+                        <td>D: Orange : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" style=" margin-left: 0px;" name="volume" value="<%=data?.volume[3]%>"> cubic inches
+                        </td>
+                        <td>D: Orange : <input type="number" min="0" class="inputText" style=" margin-left: 0px;" name="count" value="<%=data?.count[3]%>"> Ball
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>E : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" name="emptyVolume" value="<%=data?.emptyVolume[4]%>"> cubic inches
+                        </td>
+                        <td>E: Green : <input type="number" min="0" pattern="^\d+(?:\.\d{1,2})?$" step="any" class="inputText" style=" margin-left: 8px;" name="volume" value="<%=data?.volume[4]%>"> cubic inches
+                        </td>
+                        <td>E: Green : <input type="number" min="0" class="inputText" style=" margin-left: 8px;" name="count" value="<%=data?.count[4]%>"> Ball
+                        </td>
+                    </tr>
+
+
+                </tbody>
+            </table>
+            <br>
+            <div style="    display: flex;
+            justify-content: center;">
+
+                <button id="submit-button" type="submit">Submit</button>
+            </div>
+
+            <div id="responseData" style="margin-top: 20px;">
+            </div>
+        </form>
+    </div>
+
+</body>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function() {
+        $("#my-form").submit(function(event) {
+            event.preventDefault();
+
+            // Submit the form using AJAX
+            $.ajax({
+                type: "POST",
+                url: "/get-suggetions-view",
+                data: $("#my-form").serialize(),
+                success: function(response) {
+                    let responseData = response.placedBalls;
+                    let htmlData;
+                    for (let i = 0; i < responseData.length; i++) {
+                        htmlData = htmlData ? htmlData + `<span>${responseData[i]}</span></br>` : `<span>${responseData[i]}</span></br>`
+                    }
+
+                    document.getElementById('responseData').innerHTML = htmlData;
+
+                }
+            });
+        });
+    });
+</script>
+
+</html>
