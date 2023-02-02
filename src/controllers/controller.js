@@ -119,6 +119,13 @@ exports.viewSuggetionsPost = async (req, res, next) => {
         resultArray.push({ name: i.name, count: count });
       });
       j.emptyVolume = volumeOfBucket;
+      let totalFailure=[]
+      resultArray.map((i) =>
+           i.count === 0
+            ? totalFailure.push(true)
+            : ""
+        )
+      if(totalFailure.length!==ballVolumes.length){
     results.push(
         `Bucket ${j.name}: Place ${resultArray.map((i) =>
            i.count != 0
@@ -129,9 +136,13 @@ exports.viewSuggetionsPost = async (req, res, next) => {
             ? ""
             : "and " +
               volumeOfBucket.toFixed(2) +
-              " volume remains in the Backet"
+              " volume remains in the Bucket"
         }`.replace(/,/g, "")
        )
+      }else{
+        results.push(
+          `Bucket ${j.name}:Placement Can't be done!`)
+      }
     });
 
   res.send({ 
